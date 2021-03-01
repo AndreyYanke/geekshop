@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+# from mainapp.models import ProductCategory, Product
+
 # Create your views here.
 def index(request):
     context = {'title': 'GeekShop'}
@@ -12,7 +14,7 @@ def products(request):
             {'name': 'Худи черного цвета с монограммами adidas Originals', 'price': '6 090,00 руб.',
              'description': 'Мягкая ткань для свитшотов. Стиль и комфорт – это образ жизни.',
              'img': 'vendor/img/products/Adidas-hoodie.png'},
-            {'name': 'Синяя куртка The North Face', 'price': '23 725,00 руб. руб.',
+            {'name': 'Синяя куртка The North Face', 'price': '23 725,00 руб.',
              'description': 'Гладкая ткань. Водонепроницаемое покрытие. Легкий и теплый пуховый наполнитель.',
              'img': 'vendor/img/products/Blue-jacket-The-North-Face.png'},
             {'name': 'Коричневый спортивный oversized-топ ASOS DESIGN', 'price': '3 390,00 руб.',
