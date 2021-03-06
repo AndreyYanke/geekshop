@@ -5,6 +5,7 @@ from django.contrib import messages
 
 from authapp.form import UserLoginForm, UserRegisterForm
 
+
 # Create your views here.
 def login(request):
     if request.method == 'POST':
@@ -18,8 +19,12 @@ def login(request):
                 return HttpResponseRedirect(reverse('index'))
     else:
         form = UserLoginForm()
-    context = {'form': form}
+    context = {
+        'tittle': "GeekShop - Авторизация",
+        'form': form
+    }
     return render(request, 'authapp/login.html', context)
+
 
 def register(request):
     if request.method == 'POST':
@@ -29,8 +34,12 @@ def register(request):
             return HttpResponseRedirect(reverse('auth:login'))
     else:
         form = UserRegisterForm()
-        context = {'form': form}
+        context = {
+            'tittle': "GeekShop - Регистрация",
+            'form': form
+        }
     return render(request, 'authapp/register.html', context)
+
 
 def logout(request):
     auth.logout(request)
