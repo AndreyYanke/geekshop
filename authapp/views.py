@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth
 from django.urls import reverse
-from django.contrib import messages
+# from django.contrib import messages
 
 from authapp.form import UserLoginForm, UserRegisterForm
 
@@ -40,7 +40,11 @@ def register(request):
         }
     return render(request, 'authapp/register.html', context)
 
+def profile(request):
+    return render(request, 'authapp/profile.html')
+
 
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
+
