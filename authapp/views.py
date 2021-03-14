@@ -4,11 +4,10 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from authapp.form import UserLoginForm, UserRegisterForm, UserProfileForm
+from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm
 from basketapp.models import Basket
 
 
-# Create your views here.
 def login(request):
     if request.method == 'POST':
         form = UserLoginForm(data=request.POST)
@@ -19,29 +18,24 @@ def login(request):
             if user and user.is_active:
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('index'))
+        else:
+            print(form.errors)
     else:
         form = UserLoginForm()
-    context = {
-        'tittle': "GeekShop - Авторизация",
-        'form': form
-    }
+    context = {'form': form}
     return render(request, 'authapp/login.html', context)
 
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegisterForm(request.POST, request.FILES)
+        form = UserRegisterForm(data=request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Вы успешно зарегистрировались!')
             return HttpResponseRedirect(reverse('auth:login'))
     else:
         form = UserRegisterForm()
-
-    context = {
-        'tittle': 'GeekShop - Личный кабинет',
-        'form': form,
-    }
+    context = {'form': form}
     return render(request, 'authapp/register.html', context)
 
 
