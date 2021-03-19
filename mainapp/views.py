@@ -10,7 +10,7 @@ dir = os.path.dirname(__file__)
 
 # функции = вьюхи = контроллеры
 def index(request):
-    context = {'title': 'GeekShop'}
+    context = {'title': 'BookOfTea'}
     return render(request, 'mainapp/index.html', context)
 
 
