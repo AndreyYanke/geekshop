@@ -129,3 +129,12 @@ AUTH_USER_MODEL = 'authapp.User'
 
 LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/'
+
+#Email
+DOMAIN_NAME ='http://localhost:8000'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'tets123467@gmail.com'
+EMAIL_HOST_PASSWORD = 'Andrey123789'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
