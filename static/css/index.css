@@ -7,6 +7,14 @@ body {
     padding-top: 56px;
 }
 
+h1{
+    color: #ffffff
+}
+
+p{
+    color: #ffffff
+}
+
 #start-purchase-btn {
     background-color: #23364e;
     border-color: #23364e;

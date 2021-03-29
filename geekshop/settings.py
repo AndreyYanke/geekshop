@@ -65,6 +65,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'mainapp.context_processors.basket',
             ],
         },
     },
@@ -129,3 +130,12 @@ AUTH_USER_MODEL = 'authapp.User'
 
 LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/'
+
+#Email
+DOMAIN_NAME ='http://localhost:8000'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'tets123467@gmail.com'
+EMAIL_HOST_PASSWORD = 'Andrey123789'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
