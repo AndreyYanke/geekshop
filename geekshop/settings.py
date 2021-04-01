@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os
+import os, json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -35,11 +35,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
 
     'mainapp',
     'authapp',
     'basketapp',
     'adminapp',
+
+
 ]
 
 MIDDLEWARE = [
@@ -139,3 +142,20 @@ EMAIL_HOST_PASSWORD = 'Andrey123789'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
+#Authentication user from social network
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.google.GoogleOAuth2',
+)
+
+SOCIAL_SECRETS_FILE = "social_auth.json"
+SOCIAL = {}
+
+
+with open(SOCIAL_SECRETS_FILE,'r')as f:
+    SOCIAL = json.load(f)
+
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = SOCIAL.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY',"")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = SOCIAL.get('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET',"")
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
