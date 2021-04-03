@@ -147,15 +147,9 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.google.GoogleOAuth2',
 )
-
-SOCIAL_SECRETS_FILE = "social_auth.json"
-SOCIAL = {}
+SESSION_COOKIE_SECURE = True
 
 
-with open(SOCIAL_SECRETS_FILE,'r')as f:
-    SOCIAL = json.load(f)
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ('405145454375-0f5qsvc2a9npvs0pomb6a002pf722om2.apps.googleusercontent.com')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ('0fiOr3on4VvkoT88_TXHczVV')
 
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = SOCIAL.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY',"")
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = SOCIAL.get('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET',"")
-SOCIAL_AUTH_URL_NAMESPACE = 'social'
