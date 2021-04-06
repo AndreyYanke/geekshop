@@ -117,29 +117,3 @@ class ProfileFormView(FormView):
             'form': edit_form,
             'profile_form': profile_form,
         })
-
-
-# @transaction.atomic
-# def edit(request):
-#     title = 'редактирование'
-#
-#     if request.method == 'POST':
-#         edit_form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
-#         profile_form = UserProfileEditForm(data=request.POST, files=request.FILES, instance=request.userprofile)
-#
-#         if edit_form.is_valid() and profile_form.is_valid():
-#             edit_form.save()
-#             return HttpResponseRedirect(reverse('auth:profile'))
-#     else:
-#         edit_form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
-#         profile_form = UserProfileEditForm(data=request.POST, files=request.FILES, instance=request.userprofile)
-#     context = {
-#         'title': title,
-#         'form': edit_form,
-#         'profile_form': profile_form,
-#     }
-#     return render(request, 'authapp/profile.html', context)
-
-
-
-
