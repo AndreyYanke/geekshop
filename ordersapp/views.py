@@ -1,4 +1,6 @@
 from django.db import transaction
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -40,6 +42,7 @@ class OrderCreate(LoginRequiredMixin, CreateView):
                 for num, form in enumerate(formset.forms):
                     form.initial['product'] = basket_items[num].product
                     form.initial['quantity'] = basket_items[num].quantity
+                    form.instance['price'] = basket_items[num].prodict.price
                 basket_items.delete()
             else:
                 formset = OrderFormSet()
@@ -77,11 +80,14 @@ class OrderUpdate(LoginRequiredMixin, UpdateView):
         OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemsForm, extra=1)
 
         if self.request.POST:
-            formset = OrderFormSet(self.request.POST, instance=self.object)
+            data['orderitems'] = OrderFormSet(self.request.POST, instance=self.object)
         else:
             formset = OrderFormSet(instance=self.object)
+            for form in formset:
+                if form.instance.pk:
+                    form.initial['price'] = form.instance.product.price
 
-        data['orderitems'] = formset
+            data['orderitems'] = formset
 
         return data
 
@@ -124,3 +130,21 @@ def order_forming_complete(request, pk):
     order.save()
 
     return HttpResponseRedirect(reverse('ordersapp:orders_list'))
+
+
+@receiver(pre_save, sender=OrderItem)
+@receiver(pre_save, sender=Basket)
+def product_quantity_update_save(sender, update_fields, instance, **kwargs):
+    if update_fields == 'quantity' 'product':
+        if instance.pk:
+            instance.product.quantity -= instance.quantity.sender.get_item(instance.pk).quantity
+        else:
+            instance.product.quantity -=instance.quantity
+        instance.save()
+
+
+@receiver(pre_save, sender=OrderItem)
+@receiver(pre_save, sender=Basket)
+def product_quantity_update_save(sender, instance, **kwargs):
+    instance.product.quantity += instance.quantity
+    instance.product.save()
