@@ -19,9 +19,11 @@ defusedxml==0.7.1
 discord==1.0.1
 discord.py==1.5.1
 distlib==0.3.1
-Django==2.0
+Django==3.1.7
 django-emoji==2.2.2
 dp==1.0
+env==0.1.0
+environ==1.0
 filelock==3.0.12
 future==0.18.2
 gino==1.0.1
@@ -64,7 +66,7 @@ telebot==0.0.4
 termcolor==1.1.0
 typing-extensions==3.7.4.3
 urllib3==1.25.9
-virtualenv==20.4.3
+virtualenv==20.4.2
 virtualenv-clone==0.5.4
 virtualenvwrapper-win==1.2.6
 webdav==1.1.7
