@@ -21,6 +21,7 @@ class Basket(models.Model):
     created_timestamp = models.DateTimeField(auto_now_add=True)
     objects = BasketQuerySet.as_manager()
 
+
     @cached_property
     def get_items_cached(self):
         return self.user.basket.select_related()
