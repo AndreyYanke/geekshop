@@ -21,25 +21,26 @@ class Basket(models.Model):
     created_timestamp = models.DateTimeField(auto_now_add=True)
     objects = BasketQuerySet.as_manager()
 
+
     @cached_property
     def get_items_cached(self):
-        return self.user.basket.select_related()
+        return self.user.basket_set.select_related()
 
     def __str__(self):
         return f'Корзина для {self.user.username} | Продукт {self.product.name}'
 
-    def sum(self):
-        return self.quantity * self.product.price
-
     def total_quantity(self):
         _items = self.get_items_cached
         # baskets = Basket.objects.filter(user=self.user)
-        return sum(list(map(lambda x: x.quantity, _items)))
+        map_items = map(lambda x: x.quantity, _items)
+        list_items = list(map_items)
+        sum_list = sum(list_items)
+        return sum_list
 
     def total_sum(self):
         _items = self.get_items_cached
         # baskets = Basket.objects.filter(user=self.user)
-        return sum(list(map(lambda x: x.quantity, _items)))
+        return sum(list(map(lambda x: x.product.price * x.quantity, _items)))
 
     @staticmethod
     def get_item(pk):
