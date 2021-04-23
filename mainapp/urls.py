@@ -1,7 +1,6 @@
 from django.urls import path
 
 from mainapp.views import products, ProductList, ProductAdminList, products_ajax
-
 from django.views.decorators.cache import cache_page
 
 app_name = 'mainapp'

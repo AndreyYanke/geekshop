@@ -103,6 +103,16 @@ def products(request, category_id=None, page=1):
     return render(request, 'mainapp/products.html', context)
 
 
+class ProductList(ListView):
+    """
+    Контроллер вывода списка товаров
+    """
+    model = Product
+    template_name = 'mainapp/products.html'
+    context_object_name = 'products'
+    paginate_by = "3"
+
+
 class ProductCategoryList(ListView):
     """
     Контроллер вывода списка категорий
