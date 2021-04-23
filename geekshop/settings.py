@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '1h^vs@7ozr6yo$$c%rm8145=$t4pc4j&r5=w$u*zor^z=s&fka'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'template_profiler_panel',
     'django_extensions',
+
 
 
 ]
@@ -202,7 +203,6 @@ if DEBUG:
        'debug_toolbar.panels.profiling.ProfilingPanel',
        'template_profiler_panel.panels.template.TemplateProfilerPanel',
    ]
-
 
 
 if os.name == 'posix':
