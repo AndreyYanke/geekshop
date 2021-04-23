@@ -1,14 +1,16 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.db import connection
+from django.db.models import F, Q
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.template.loader import render_to_string
+from django.urls import reverse_lazy
+from django.views.generic import ListView, UpdateView, DeleteView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from mainapp.models import Product, ProductCategory
 from django.conf import settings
 from django.core.cache import cache
-from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
-from django.views.generic import ListView
-
-from mainapp.models import Product, ProductCategory
 
 
 def get_links_menu():
@@ -76,8 +78,7 @@ def get_products_in_category_ordered_by_price(pk):
         key = f'products_in_category_orederd_by_price_{pk}'
         products = cache.get(key)
         if products is None:
-            products = Product.objects.filter(category__pk=pk, is_active=True, category__is_active=True).order_by(
-                'price')
+            products = Product.objects.filter(category__pk=pk, is_active=True, category__is_active=True).order_by('price')
             cache.set(key, products)
         return products
     else:
@@ -86,21 +87,62 @@ def get_products_in_category_ordered_by_price(pk):
 
 # функции = вьюхи = контроллеры
 def index(request):
-    context = {'title': 'BookOfTea'}
+    context = {'title': 'GeekShop'}
     return render(request, 'mainapp/index.html', context)
 
 
+@cache_page(3600)
 def products(request, category_id=None, page=1):
-    context = {'title': 'BookOfTea - Каталог', 'categories': ProductCategory.objects.all()}
+    context = {'title': 'GeekShop - Каталог', 'categories': ProductCategory.objects.all()}
     if category_id:
-        products = Product.objects.filter(category_id=category_id).order_by('price')
+        products = Product.objects.filter(category_id=category_id).order_by('-price')
     else:
-        products = Product.objects.all().order_by('price')
-    paginator = Paginator(products, per_page=3)
+        products = Product.objects.all().order_by('-price')
+    paginator = Paginator(products, 3)
     products_paginator = paginator.page(page)
     context.update({'products': products_paginator})
-
     return render(request, 'mainapp/products.html', context)
+
+
+class ProductList(ListView):
+    """
+    Контроллер вывода списка товаров
+    """
+    model = Product
+    template_name = 'mainapp/products.html'
+    context_object_name = 'products'
+    paginate_by = "3"
+
+    def get_context_data(self, **kwargs):
+        """Добавляем список категорий для вывода сайдбара с категориями на странице каталога"""
+        context = super().get_context_data()
+        context['categories'] = ProductCategory.objects.all()
+
+        return context
+
+
+class ProductListByCategory(ListView):
+    """
+    Контроллер вывода списка товаров
+    """
+    model = Product
+    template_name = 'mainapp/products.html'
+    context_object_name = 'products'
+
+    def get_context_data(self, category_id=None, *args, **kwargs):
+        """Добавляем список категорий для вывода сайдбара с категориями на странице каталога"""
+
+        context = super().get_context_data()
+        context['categories'] = ProductCategory.objects.all()
+
+        if self.kwargs.get('category_id'):
+            category_id = int(self.kwargs.get('category_id'))
+            products = Product.objects.filter(category_id=category_id).order_by('-price')
+        else:
+            products = Product.objects.all().order_by('-price')
+        context['products'] = products
+
+        return context
 
 
 class ProductCategoryList(ListView):
@@ -111,6 +153,22 @@ class ProductCategoryList(ListView):
     template_name = 'mainapp/category_list.html'
     context_object_name = 'categories'
     paginate_by = "3"
+
+
+class ProductDetail(DetailView):
+    """
+    Контроллер вывода информации о продукте
+    """
+    model = Product
+    template_name = 'mainapp/products_detail.html'
+    context_object_name = 'product'
+
+    def get_context_data(self, category_id=None, *args, **kwargs):
+        """Добавляем список категорий для вывода сайдбара с категориями на странице каталога"""
+
+        context = super().get_context_data()
+        context['categories'] = ProductCategory.objects.all()
+        return context
 
 
 class ProductAdminList(LoginRequiredMixin, ListView):
